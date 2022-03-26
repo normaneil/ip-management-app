@@ -4,22 +4,21 @@
       class="text-4xl justify-center flex items-top h-screen"
       v-if="!isLogin"
     >
-      <VueformDemo></VueformDemo>
+      <Login></Login>
     </div>
     <div v-if="isLogin" class="m-5">
-      <Items />
+      <Home />
     </div>
   </div>
 </template>
 <script>
-import VueformDemo from "@/components/VueformDemo.vue";
-import Items from "@/components/Items.vue";
-import VueCookies from "vue-cookies";
+import Login from "@/components/Login.vue";
+import Home from "@/components/Home.vue";
 export default {
   name: "App",
   components: {
-    VueformDemo,
-    Items,
+    Login,
+    Home,
   },
   data() {
     return {
@@ -27,7 +26,9 @@ export default {
     };
   },
   mounted() {
-    this.isLogin = VueCookies.get("userToken") ? true : false;
+    let token = window.localStorage.getItem("userToken");
+    // console.log("token", token);
+    this.isLogin = token ? true : false;
   },
 };
 </script>

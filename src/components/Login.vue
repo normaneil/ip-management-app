@@ -47,7 +47,6 @@
 
 <script>
 import api from "@/api";
-import VueCookies from "vue-cookies";
 export default {
   name: "VueformDemo",
   data() {
@@ -61,14 +60,14 @@ export default {
 
   methods: {
     async handleSubmit() {
-      // alert(JSON.stringify(this.form));
       const result = await api.login(this.form);
       if (result) {
         if (result.data.success) {
-          console.log(result.data.data);
-          VueCookies.set("userToken", result.data.data.token);
+          // console.log(result.data.data);
+          window.localStorage.setItem("userToken", result.data.data.token);
           window.location.href = "/";
         } else {
+          window.localStorage.removeItem("userToken");
           alert(JSON.stringify(result.data.message));
         }
       }

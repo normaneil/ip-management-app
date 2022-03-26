@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { api } from "@/api/config";
-import VueCookies from "vue-cookies";
 import _ from "lodash";
 
 export default {
@@ -20,5 +19,13 @@ export default {
     return await api.post(`/ip-address/`, data).catch(function(error) {
       return error.response;
     });
+  },
+  async updateIpAddress(data) {
+    // console.log("data", data);
+    return await api
+      .put(`/ip-address/${data.id}?label=${data.label}`)
+      .catch(function(error) {
+        return error.response;
+      });
   },
 };
