@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full w-m-ws">
+  <div class="w-full max-w-lg">
     <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <h4 class="text-center text-lg font-bold">SIGN UP</h4>
       <div class="mb-4">

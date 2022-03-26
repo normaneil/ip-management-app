@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="justify-center flex items-top h-screen" v-if="!isLogin">
+    <div class="justify-center flex items-center h-screen" v-if="!isLogin">
       <Login v-if="!isSignUp" @signup="showSignup"></Login>
       <Signup v-if="isSignUp" @signin="showSignin"></Signup>
     </div>
