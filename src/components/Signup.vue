@@ -1,7 +1,18 @@
 <template>
   <div class="w-full w-m-ws">
     <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <h4 class="text-center text-lg font-bold">LOG IN</h4>
+      <h4 class="text-center text-lg font-bold">SIGN UP</h4>
+      <div class="mb-4">
+        <label class="block text-gray text-lg font-bold mb-2" for="name">
+          Name
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray text-lg leading-tight focus:outline-none focus:shadow-outline"
+          v-model="form.name"
+          type="text"
+          placeholder="Name"
+        />
+      </div>
       <div class="mb-4">
         <label class="block text-gray text-lg font-bold mb-2" for="email">
           Email
@@ -24,7 +35,19 @@
           class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 text-lg mb-3 leading-tight focus:outline-none focus:shadow-outline"
           v-model="form.password"
           type="password"
-          placeholder="******************"
+        />
+      </div>
+      <div class="mb-6">
+        <label
+          class="block text-gray-700 text-lg font-bold mb-2"
+          for="c_password"
+        >
+          Confirm Password
+        </label>
+        <input
+          class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 text-lg mb-3 leading-tight focus:outline-none focus:shadow-outline"
+          v-model="form.c_password"
+          type="password"
         />
       </div>
       <div class="flex items-center justify-between">
@@ -33,50 +56,61 @@
           type="button"
           @click="handleSubmit()"
         >
-          Sign In
+          Sign Up
         </button>
         <a
           class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
           href="#"
-          @click.prevent="signup()"
+          @click.prevent="signin"
         >
-          Sign Up
+          Sign In
         </a>
       </div>
     </form>
+    <ToastSuccess v-if="ifAdded" :toast_text="toast_text"></ToastSuccess>
   </div>
 </template>
 
 <script>
 import api from "@/api";
+import ToastSuccess from "@/components/ToastSuccess.vue";
 export default {
   name: "VueformDemo",
-  emits: ["signup"],
+  emits: ["signin"],
+  components: {
+    ToastSuccess,
+  },
   data() {
     return {
       form: {
+        name: "",
         email: "",
         password: "",
+        c_password: "",
       },
+      ifAdded: false,
+      toast_text: "Registered successfully",
     };
   },
 
   methods: {
     async handleSubmit() {
-      const result = await api.login(this.form);
+      const result = await api.register(this.form);
+      console.log(result.data.data);
       if (result) {
         if (result.data.success) {
           // console.log(result.data.data);
-          window.localStorage.setItem("userToken", result.data.data.token);
-          window.location.href = "/";
+          this.ifAdded = true;
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 2000);
         } else {
-          window.localStorage.removeItem("userToken");
           alert(JSON.stringify(result.data.message));
         }
       }
     },
-    signup() {
-      this.$emit("signup");
+    signin() {
+      this.$emit("signin");
     },
   },
 };
