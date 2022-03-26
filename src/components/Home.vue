@@ -34,7 +34,7 @@ export default {
     AddForm,
     ToastSuccess,
     TableList,
-    UpdateForm,
+    UpdateForm
   },
   data() {
     return {
@@ -42,13 +42,13 @@ export default {
       ifAdded: false,
       isOpen: false,
       item: null,
-      toast_text: "Item added successfully",
+      toast_text: "Item added successfully"
     };
   },
   computed: {
     isModalVisible() {
       return this.isOpen;
-    },
+    }
   },
   mounted() {
     this.getIpAddresses();
@@ -98,8 +98,8 @@ export default {
     },
     close() {
       this.isOpen = false;
-    },
-  },
+    }
+  }
 };
 </script>
 

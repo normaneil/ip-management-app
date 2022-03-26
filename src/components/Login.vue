@@ -57,9 +57,9 @@ export default {
     return {
       form: {
         email: "",
-        password: "",
+        password: ""
       },
-      isDisabled: false,
+      isDisabled: false
     };
   },
 
@@ -82,7 +82,7 @@ export default {
     },
     signup() {
       this.$emit("signup");
-    },
-  },
+    }
+  }
 };
 </script>

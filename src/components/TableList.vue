@@ -51,7 +51,7 @@ export default {
   methods: {
     viewIpAddress(item) {
       this.$emit("view", item);
-    },
-  },
+    }
+  }
 };
 </script>

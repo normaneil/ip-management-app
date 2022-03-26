@@ -58,8 +58,8 @@ export default {
     return {
       form: {
         ip_add: "",
-        label: "",
-      },
+        label: ""
+      }
     };
   },
   methods: {
@@ -67,7 +67,7 @@ export default {
       this.$emit("input", this.form);
       this.form.ip_add = "";
       this.form.label = "";
-    },
-  },
+    }
+  }
 };
 </script>

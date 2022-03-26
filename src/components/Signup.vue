@@ -79,7 +79,7 @@ export default {
   name: "VueformDemo",
   emits: ["signin"],
   components: {
-    ToastSuccess,
+    ToastSuccess
   },
   data() {
     return {
@@ -87,11 +87,11 @@ export default {
         name: "",
         email: "",
         password: "",
-        c_password: "",
+        c_password: ""
       },
       ifAdded: false,
       toast_text: "Registered successfully",
-      isDisabled: false,
+      isDisabled: false
     };
   },
 
@@ -117,7 +117,7 @@ export default {
     },
     signin() {
       this.$emit("signin");
-    },
-  },
+    }
+  }
 };
 </script>

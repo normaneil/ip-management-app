@@ -47,6 +47,6 @@
 <script>
 export default {
   name: "toast-success",
-  props: ["toast_text"],
+  props: ["toast_text"]
 };
 </script>

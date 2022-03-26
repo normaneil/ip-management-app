@@ -18,12 +18,12 @@ export default {
   components: {
     Login,
     Signup,
-    Home,
+    Home
   },
   data() {
     return {
       isLogin: false,
-      isSignUp: false,
+      isSignUp: false
     };
   },
   mounted() {
@@ -37,7 +37,7 @@ export default {
     },
     showSignin() {
       this.isSignUp = false;
-    },
-  },
+    }
+  }
 };
 </script>

@@ -5,8 +5,8 @@ const api = setup({
   baseURL: process.env.VUE_APP_API_URL,
   // `axios-cache-adapter` options
   cache: {
-    maxAge: 3 * 1000,
-  },
+    maxAge: 3 * 1000
+  }
 });
 
 //  add token on header if token is exist

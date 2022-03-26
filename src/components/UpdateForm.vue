@@ -71,8 +71,8 @@ export default {
       form: {
         id: null,
         ip_add: "",
-        label: "",
-      },
+        label: ""
+      }
     };
   },
   mounted() {
@@ -89,7 +89,7 @@ export default {
     },
     close() {
       this.$emit("close");
-    },
-  },
+    }
+  }
 };
 </script>
