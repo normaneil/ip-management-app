@@ -31,6 +31,7 @@
         <button
           class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           type="button"
+          :disabled="isDisabled"
           @click="handleSubmit()"
         >
           Sign In
@@ -58,18 +59,22 @@ export default {
         email: "",
         password: "",
       },
+      isDisabled: false,
     };
   },
 
   methods: {
     async handleSubmit() {
+      this.isDisabled = true;
       const result = await api.login(this.form);
       if (result) {
         if (result.data.success) {
           // console.log(result.data.data);
+          this.isDisabled = false;
           window.localStorage.setItem("userToken", result.data.data.token);
           window.location.href = "/";
         } else {
+          this.isDisabled = false;
           window.localStorage.removeItem("userToken");
           alert(JSON.stringify(result.data.message));
         }

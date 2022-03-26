@@ -54,6 +54,7 @@
         <button
           class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           type="button"
+          :disabled="isDisabled"
           @click="handleSubmit()"
         >
           Sign Up
@@ -90,21 +91,26 @@ export default {
       },
       ifAdded: false,
       toast_text: "Registered successfully",
+      isDisabled: false,
     };
   },
 
   methods: {
     async handleSubmit() {
+      this.isDisabled = true;
       const result = await api.register(this.form);
       console.log(result.data.data);
       if (result) {
         if (result.data.success) {
           // console.log(result.data.data);
+
           this.ifAdded = true;
           setTimeout(() => {
-            window.location.href = "/";
+            // window.location.href = "/";
+            this.$emit("signin");
           }, 2000);
         } else {
+          this.isDisabled = false;
           alert(JSON.stringify(result.data.message));
         }
       }
