@@ -141,7 +141,76 @@
       </div>
     </div>
     <div v-if="isModalVisible">
-      {{ item }}
+      <form class="bg-white px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="username"
+          >
+            IP <ADDress></ADDress>
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            v-model="updateForm.ip_add"
+            disabled
+            type="text"
+          />
+        </div>
+        <div class="mb-6">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="password"
+          >
+            LABEL
+          </label>
+          <input
+            class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            v-model="updateForm.label"
+            type="text"
+          />
+        </div>
+        <div class="flex items-center justify-between">
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+            @click="updateIpAddress()"
+          >
+            Update
+          </button>
+          <button
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+            @click="isOpen = false"
+          >
+            Close
+          </button>
+        </div>
+        <div class="mb-6 mt-6">
+          <ol class="relative border-l border-gray-200 dark:border-gray-700">
+            <li
+              class="mb-10 ml-4"
+              v-for="item in item.histories"
+              :key="item.id"
+            >
+              <div
+                class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"
+              ></div>
+              <time
+                class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500"
+                >{{ item.created_at }}</time
+              >
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                {{ item.user }}
+              </h3>
+              <p
+                class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400"
+              >
+                {{ item.history }}
+              </p>
+            </li>
+          </ol>
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -152,6 +221,11 @@ export default {
     return {
       items: [],
       form: {
+        ip_add: "",
+        label: "",
+      },
+      updateForm: {
+        id: null,
         ip_add: "",
         label: "",
       },
@@ -171,12 +245,12 @@ export default {
   methods: {
     async getIpAddresses() {
       const result = await api.getIpAddresses();
-      console.log(result.data.data);
+      //   console.log(result.data.data);
       this.items = result.data.data.length > 0 ? result.data.data : [];
     },
     async addIpAddress() {
       const result = await api.addIpAddress(this.form);
-      console.log(result.data);
+      //   console.log(result.data);
       if (result.data.success) {
         this.ifAdded = true;
         this.form.ip_add = "";
@@ -191,9 +265,14 @@ export default {
       }
     },
     viewIpAddress(item) {
-      //   alert(JSON.stringify(id));
       this.item = item;
+      this.updateForm.id = item.id;
+      this.updateForm.ip_add = item.ip_add;
+      this.updateForm.label = item.label;
       this.isOpen = true;
+    },
+    updateIpAddress() {
+      console.log(this.updateForm);
     },
   },
 };
