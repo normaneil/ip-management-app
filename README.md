@@ -20,18 +20,10 @@ VUE_APP_API_URL=http://127.0.0.1:8000/api
 npm run serve
 ```
 
-### Compiles and minifies for production
+### How to use:
 
-```
-npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Create user
+- Login
+- After login. You will see the list of all ip address recorded.
+- Add Ip Address
+- Update Ip Address label
