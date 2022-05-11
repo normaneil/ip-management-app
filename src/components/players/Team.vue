@@ -1,7 +1,13 @@
 <script>
 import api from "@/api";
+import _ from "lodash";
+import TreeMenu from "@/components/players/TreeMenu.vue";
+
 export default {
   name: "team",
+  components: {
+    TreeMenu,
+  },
   data() {
     return {
       form: {
@@ -14,6 +20,7 @@ export default {
       },
       team_sales: 0,
       members: [],
+      tree: [],
     };
   },
   methods: {
@@ -21,16 +28,87 @@ export default {
       const result = await api.getTeam(this.form);
       // console.log(result);
       if (result.status == 200) {
-        console.log(result.data);
+        // console.log(result.data);
         this.item = result.data;
         this.head = result.data.Head;
         this.team_sales = result.data.TeamSales
           ? result.data.TeamSales.toLocaleString()
           : 0;
-        this.members = result.data.Memeber;
+        // this.members = result.data.Memeber;
+        let arr = result.data.Memeber;
+        // let members = [];
+        let data = [];
+        // members.push({ Level: 0, Player: this.head });
+        data.push({
+          id: this.head.ID,
+          Name: this.head.Name,
+          parent_id: this.head.Pid,
+          Sales: this.head.Sales,
+          name: this.head.Name,
+          text: this.head.Name,
+          level: 0,
+        });
+        arr.forEach((item) => {
+          // console.log(item);
+          data.push({
+            id: item.Player.ID,
+            Name: item.Player.Name,
+            parent_id: item.Player.Pid,
+            Sales: item.Player.Sales,
+            name: item.Player.Name,
+            text: item.Player.Name,
+            level: item.Level,
+          });
+          // members.push({ Level: item.Level });
+        });
+        // console.log(arr);
+        // console.log(members);
+        // console.log("data", data);
 
-        console.log(this.members);
+        // ID: 939
+        // Name: "Aaliyah Hartmann"
+        // Pid: 9
+        // Sales: 79427
+        // children: []
+        // name: "Aaliyah Hartmann ID: 939 PID: 9"
+        // nodes: []
+        // text: "Aaliyah Hartmann ID: 939 PID: 9"
+        // let tree = this.unflatten(data, data[1]);
+        this.tree = this.nest(data, data[0].id);
+        // console.log("Tree", tree);
       }
+    },
+    unflatten(array, parent, tree) {
+      // console.log("Array", array);
+      tree = typeof tree !== "undefined" ? tree : [];
+      parent = typeof parent !== "undefined" ? parent : { ID: 0 };
+      console.log("parent", parent);
+      var children = _.filter(array, function (child) {
+        return child.Pid == parent.ID;
+      });
+      console.log("children", children);
+
+      if (!_.isEmpty(children)) {
+        if (parent.ID == 0) {
+          tree = children;
+        } else {
+          parent["nodes"] = children;
+        }
+        _.each(children, function (child) {
+          this.unflatten(array, child);
+          // console.log("child", child);
+        });
+      }
+
+      return tree;
+    },
+
+    nest(items, id = null, link = "parent_id") {
+      let result = items
+        .filter((item) => item[link] === id)
+        .map((item) => ({ ...item, nodes: this.nest(items, item.id) }));
+      // console.log(result);
+      return result;
     },
   },
 };
@@ -82,98 +160,24 @@ export default {
     </div>
 
     <div>
-      <ul>
-        <li>
-          {{ head.Name }}
-          <span
-            v-if="head.ID"
-            class="
-              inline-block
-              py-1.5
-              px-2.5
-              leading-none
-              text-center
-              whitespace-nowrap
-              align-baseline
-              bg-blue-600
-              text-white
-              rounded
-              text-xs
-            "
-          >
-            Team Sales: {{ team_sales }}
-          </span>
+      <!-- <tree-view :tree="tree" :expanded="true"></tree-view> -->
+      <!-- <ul>
+        <li>Head: {{ head.Name }}</li>
+        <li v-for="item in tree" :key="item.id">
+          {{ item.name }} {{ item.level }}*
+
+          <div v-if="item.nodes.length > 0">
+            <tree-list :items="item.nodes" :depth="0"></tree-list>
+          </div>
         </li>
-        <ul class="tree">
-          <li v-for="item in members" :key="item.ID">
-            <div>{{ item.Player.Name }}</div>
-            <div>Level: {{ item.Level }}</div>
-          </li>
-        </ul>
-      </ul>
+      </ul> -->
+
+      <tree-menu
+        :nodes="tree"
+        :depth="0"
+        :label="head.Name"
+        :level="null"
+      ></tree-menu>
     </div>
   </div>
 </template>
-<style scoped>
-/**
- * Framework starts from here ...
- * ------------------------------
- */
-
-.tree,
-.tree ul {
-  margin: 0 0 0 1em; /* indentation */
-  padding: 0;
-  list-style: none;
-  /* color: #369; */
-  position: relative;
-}
-
-.tree ul {
-  margin-left: 0.5em;
-  color: #369;
-} /* (indentation/2) */
-
-.tree span {
-  margin-left: 1.5em;
-  font-weight: bold;
-}
-.tree:before,
-.tree ul:before {
-  content: "";
-  display: block;
-  width: 0;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  border-left: 1px solid;
-}
-
-.tree li {
-  margin: 0;
-  padding: 0 1.5em; /* indentation + .5em */
-  line-height: 2em; /* default list item's `line-height` */
-  /* font-weight: bold; */
-  position: relative;
-}
-
-.tree li:before {
-  content: "";
-  display: block;
-  width: 10px; /* same with indentation */
-  height: 0;
-  border-top: 1px solid;
-  margin-top: -1px; /* border top width */
-  position: absolute;
-  top: 1em; /* (line-height/2) */
-  left: 0;
-}
-
-.tree li:last-child:before {
-  background: white; /* same with body background */
-  height: auto;
-  top: 1em; /* (line-height/2) */
-  bottom: 0;
-}
-</style>
